@@ -77,8 +77,8 @@ export default function Dashboard() {
           {activeTab === "settings" && (
             <div className="max-w-xl bg-white border rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold mb-4">Connect Sending Account</h3>
-              <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full mb-4 p-2 border rounded-md" />
-              <input type="password" placeholder="16-digit App Password" value={appPassword} onChange={(e) => setAppPassword(e.target.value)} className="w-full mb-4 p-2 border rounded-md" />
+              <input type="email" placeholder="Email Address" value={email} onChange={(e: any) => setEmail(e.target.value)} className="w-full mb-4 p-2 border rounded-md" />
+              <input type="password" placeholder="16-digit App Password" value={appPassword} onChange={(e: any) => setAppPassword(e.target.value)} className="w-full mb-4 p-2 border rounded-md" />
               <button onClick={handleConnectMailbox} className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800">Connect Mailbox</button>
               {status && <p className="mt-4 text-sm font-medium text-red-600">{status}</p>}
             </div>
