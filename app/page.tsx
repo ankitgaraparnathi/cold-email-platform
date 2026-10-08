@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { Mail, Users, Activity, Settings, Plus, Play } from "lucide-react";
+import React, { useState } from "react";
+import { Mail, Users, Activity, Settings, Plus } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -12,29 +12,31 @@ export default function Dashboard() {
   const [email, setEmail] = useState("");
   const [appPassword, setAppPassword] = useState("");
   const [status, setStatus] = useState("");
+  const [isConnecting, setIsConnecting] = useState(false);
 
   const handleConnectMailbox = async () => {
     if (!email || !appPassword) {
-      setStatus("Please fill all fields.");
+      setStatus("Error: Please fill all fields.");
       return;
     }
     
+    setIsConnecting(true);
     setStatus("Connecting to database...");
     
     try {
       const { error } = await supabase.from("mailboxes").insert([
-        { email: email, app_password: appPassword }
+        { email, app_password: appPassword }
       ]);
       
-      if (error) {
-        setStatus("Database error: " + error.message);
-      } else {
-        setStatus("Mailbox connected securely!");
-        setEmail("");
-        setAppPassword("");
-      }
+      if (error) throw error;
+      
+      setStatus("Success: Mailbox connected securely!");
+      setEmail("");
+      setAppPassword("");
     } catch (err: any) {
-      setStatus("Client error: " + err.message);
+      setStatus("Error: " + (err?.message || "Database connection failed."));
+    } finally {
+      setIsConnecting(false);
     }
   };
 
@@ -77,10 +79,32 @@ export default function Dashboard() {
           {activeTab === "settings" && (
             <div className="max-w-xl bg-white border rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold mb-4">Connect Sending Account</h3>
-              <input type="email" placeholder="Email Address" value={email} onChange={(e: any) => setEmail(e.target.value)} className="w-full mb-4 p-2 border rounded-md" />
-              <input type="password" placeholder="16-digit App Password" value={appPassword} onChange={(e: any) => setAppPassword(e.target.value)} className="w-full mb-4 p-2 border rounded-md" />
-              <button onClick={handleConnectMailbox} className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800">Connect Mailbox</button>
-              {status && <p className="mt-4 text-sm font-medium text-red-600">{status}</p>}
+              <input 
+                type="email" 
+                placeholder="Email Address" 
+                value={email} 
+                onChange={(e: any) => setEmail(e.target.value)} 
+                className="w-full mb-4 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none" 
+              />
+              <input 
+                type="password" 
+                placeholder="16-digit App Password" 
+                value={appPassword} 
+                onChange={(e: any) => setAppPassword(e.target.value)} 
+                className="w-full mb-4 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none" 
+              />
+              <button 
+                onClick={handleConnectMailbox} 
+                disabled={isConnecting}
+                className={`w-full py-2 rounded-md text-white transition-colors ${isConnecting ? 'bg-gray-400' : 'bg-black hover:bg-gray-800'}`}
+              >
+                {isConnecting ? 'Connecting...' : 'Connect Mailbox'}
+              </button>
+              {status && (
+                <p className={`mt-4 text-sm font-medium ${status.startsWith('Error') ? 'text-red-600' : 'text-green-600'}`}>
+                  {status}
+                </p>
+              )}
             </div>
           )}
         </main>
