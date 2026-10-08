@@ -1,9 +1,35 @@
 "use client";
 import { useState } from "react";
 import { Mail, Users, Activity, Settings, Plus, Play } from "lucide-react";
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("campaigns");
+  const [email, setEmail] = useState("");
+  const [appPassword, setAppPassword] = useState("");
+  const [status, setStatus] = useState("");
+
+  const handleConnectMailbox = async () => {
+    if (!email || !appPassword) return setStatus("Please fill all fields.");
+    setStatus("Connecting...");
+
+    const { error } = await supabase
+      .from('mailboxes')
+      .insert([{ email, app_password: appPassword }]);
+
+    if (error) {
+      setStatus("Error connecting mailbox: " + error.message);
+    } else {
+      setStatus("Mailbox connected securely!");
+      setEmail("");
+      setAppPassword("");
+    }
+  };
 
   return (
     <div className="flex h-screen bg-gray-50 text-gray-900">
@@ -45,9 +71,24 @@ export default function Dashboard() {
           {activeTab === "settings" && (
             <div className="max-w-xl bg-white border rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold mb-4">Connect Sending Account</h3>
-              <input type="email" placeholder="Email Address" className="w-full mb-4 p-2 border rounded-md" />
-              <input type="password" placeholder="16-digit App Password" className="w-full mb-4 p-2 border rounded-md" />
-              <button className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800">Connect Mailbox</button>
+              <input 
+                type="email" 
+                placeholder="Email Address" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full mb-4 p-2 border rounded-md" 
+              />
+              <input 
+                type="password" 
+                placeholder="16-digit App Password" 
+                value={appPassword}
+                onChange={(e) => setAppPassword(e.target.value)}
+                className="w-full mb-4 p-2 border rounded-md" 
+              />
+              <button onClick={handleConnectMailbox} className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800">
+                Connect Mailbox
+              </button>
+              {status && <p className="mt-4 text-sm font-medium text-blue-600">{status}</p>}
             </div>
           )}
         </main>
