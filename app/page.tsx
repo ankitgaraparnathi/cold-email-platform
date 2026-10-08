@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Mail, Users, Activity, Settings, Plus, Play } from "lucide-react";
 
@@ -8,7 +7,6 @@ export default function Dashboard() {
 
   return (
     <div className="flex h-screen bg-gray-50 text-gray-900">
-      {/* Sidebar */}
       <div className="w-64 bg-white border-r flex flex-col">
         <div className="p-6 border-b">
           <h1 className="text-xl font-bold text-blue-600 flex items-center gap-2">
@@ -27,12 +25,7 @@ export default function Dashboard() {
             <Settings className="w-5 h-5" /> Mailbox Setup
           </button>
         </nav>
-        <div className="p-4 border-t text-sm text-gray-500">
-          Ankit's Workspace
-        </div>
       </div>
-
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white border-b p-6 flex justify-between items-center">
           <h2 className="text-2xl font-semibold capitalize">{activeTab}</h2>
@@ -40,41 +33,18 @@ export default function Dashboard() {
             <Plus className="w-4 h-4" /> New Campaign
           </button>
         </header>
-
         <main className="flex-1 p-6 overflow-auto">
           {activeTab === "campaigns" && (
-            <div className="bg-white border rounded-lg shadow-sm">
-              <div className="p-4 border-b flex justify-between items-center bg-gray-50">
-                <span className="font-semibold">US Staffing Leads - Q4</span>
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-1">
-                  <Play className="w-3 h-3" /> Active
-                </span>
-              </div>
-              <div className="p-6 grid grid-cols-4 gap-4 text-center">
-                <div className="p-4 border rounded-md">
-                  <div className="text-2xl font-bold">450</div>
-                  <div className="text-sm text-gray-500">Contacted</div>
-                </div>
-                <div className="p-4 border rounded-md">
-                  <div className="text-2xl font-bold text-blue-600">62%</div>
-                  <div className="text-sm text-gray-500">Open Rate</div>
-                </div>
-                <div className="p-4 border rounded-md">
-                  <div className="text-2xl font-bold text-green-600">4%</div>
-                  <div className="text-sm text-gray-500">Reply Rate</div>
-                </div>
-                <div className="p-4 border rounded-md">
-                  <div className="text-2xl font-bold text-red-600">0.2%</div>
-                  <div className="text-sm text-gray-500">Bounce Rate</div>
-                </div>
-              </div>
-            </div>
+             <div className="bg-white border rounded-lg shadow-sm p-6 grid grid-cols-4 gap-4 text-center">
+                <div className="p-4 border rounded-md"><div className="text-2xl font-bold">450</div><div className="text-sm text-gray-500">Contacted</div></div>
+                <div className="p-4 border rounded-md"><div className="text-2xl font-bold text-blue-600">62%</div><div className="text-sm text-gray-500">Open Rate</div></div>
+                <div className="p-4 border rounded-md"><div className="text-2xl font-bold text-green-600">4%</div><div className="text-sm text-gray-500">Reply Rate</div></div>
+                <div className="p-4 border rounded-md"><div className="text-2xl font-bold text-red-600">0.2%</div><div className="text-sm text-gray-500">Bounce Rate</div></div>
+             </div>
           )}
-
           {activeTab === "settings" && (
             <div className="max-w-xl bg-white border rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold mb-4">Connect Sending Account</h3>
-              <p className="text-sm text-gray-600 mb-6">Enter your Google App Password to authorize sending.</p>
               <input type="email" placeholder="Email Address" className="w-full mb-4 p-2 border rounded-md" />
               <input type="password" placeholder="16-digit App Password" className="w-full mb-4 p-2 border rounded-md" />
               <button className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800">Connect Mailbox</button>
