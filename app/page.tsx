@@ -1,69 +1,87 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { Mail, Users, Activity, Settings, Plus, Play } from "lucide-react";
+
+export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState("campaigns");
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="flex h-screen bg-gray-50 text-gray-900">
+      {/* Sidebar */}
+      <div className="w-64 bg-white border-r flex flex-col">
+        <div className="p-6 border-b">
+          <h1 className="text-xl font-bold text-blue-600 flex items-center gap-2">
+            <Mail className="w-6 h-6" />
+            OutreachMVP
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <nav className="flex-1 p-4 space-y-2">
+          <button onClick={() => setActiveTab("campaigns")} className={`w-full flex items-center gap-3 px-4 py-2 rounded-md ${activeTab === 'campaigns' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}>
+            <Activity className="w-5 h-5" /> Campaigns
+          </button>
+          <button onClick={() => setActiveTab("leads")} className={`w-full flex items-center gap-3 px-4 py-2 rounded-md ${activeTab === 'leads' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}>
+            <Users className="w-5 h-5" /> Lead Lists
+          </button>
+          <button onClick={() => setActiveTab("settings")} className={`w-full flex items-center gap-3 px-4 py-2 rounded-md ${activeTab === 'settings' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}>
+            <Settings className="w-5 h-5" /> Mailbox Setup
+          </button>
+        </nav>
+        <div className="p-4 border-t text-sm text-gray-500">
+          Ankit's Workspace
         </div>
-      </main>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <header className="bg-white border-b p-6 flex justify-between items-center">
+          <h2 className="text-2xl font-semibold capitalize">{activeTab}</h2>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2 font-medium">
+            <Plus className="w-4 h-4" /> New Campaign
+          </button>
+        </header>
+
+        <main className="flex-1 p-6 overflow-auto">
+          {activeTab === "campaigns" && (
+            <div className="bg-white border rounded-lg shadow-sm">
+              <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+                <span className="font-semibold">US Staffing Leads - Q4</span>
+                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-1">
+                  <Play className="w-3 h-3" /> Active
+                </span>
+              </div>
+              <div className="p-6 grid grid-cols-4 gap-4 text-center">
+                <div className="p-4 border rounded-md">
+                  <div className="text-2xl font-bold">450</div>
+                  <div className="text-sm text-gray-500">Contacted</div>
+                </div>
+                <div className="p-4 border rounded-md">
+                  <div className="text-2xl font-bold text-blue-600">62%</div>
+                  <div className="text-sm text-gray-500">Open Rate</div>
+                </div>
+                <div className="p-4 border rounded-md">
+                  <div className="text-2xl font-bold text-green-600">4%</div>
+                  <div className="text-sm text-gray-500">Reply Rate</div>
+                </div>
+                <div className="p-4 border rounded-md">
+                  <div className="text-2xl font-bold text-red-600">0.2%</div>
+                  <div className="text-sm text-gray-500">Bounce Rate</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "settings" && (
+            <div className="max-w-xl bg-white border rounded-lg shadow-sm p-6">
+              <h3 className="text-lg font-semibold mb-4">Connect Sending Account</h3>
+              <p className="text-sm text-gray-600 mb-6">Enter your Google App Password to authorize sending.</p>
+              <input type="email" placeholder="Email Address" className="w-full mb-4 p-2 border rounded-md" />
+              <input type="password" placeholder="16-digit App Password" className="w-full mb-4 p-2 border rounded-md" />
+              <button className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800">Connect Mailbox</button>
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
